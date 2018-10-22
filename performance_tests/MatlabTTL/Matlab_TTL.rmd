@@ -1,0 +1,39 @@
+---
+title: "Matlab TTL performance"
+author: "wolf zinke"
+output:
+  pdf_document: default
+  pdf: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = getwd())
+```
+
+# load required packages
+  
+Load all packages required for the analysis. If these packages are not available, install them on the fly with a `install.packages(<packagesname>)` call.
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+Pckglst = c("ezknitr", "ggplot2", "plyr", "rstudioapi")
+for(cPckg in Pckglst){
+if(!require(cPckg , character.only=TRUE)){
+install.packages(cPckg)
+library(cPckg , character.only = TRUE)
+}
+}
+```
+
+
+# get data
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+
+flnm = 'data/sunfounder_mega/SeriesA/F0001CH1.CSV'
+
+dt = read.csv(flnm, header=FALSE, colClasses=c("NULL", "NULL", "NULL", NA, NA))
+
+
+
+```
