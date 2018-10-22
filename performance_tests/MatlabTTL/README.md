@@ -1,9 +1,10 @@
 # Matlab TTL trigger
 
-Tektronix TDS 1002B
+Data acquired with Tektronix TDS 1002B (directly saved to USB stick).
 
-Series A: On 10 ms, Off 100 ms (25 ms bin)
-Series B: On 100 ms, Off 100 ms (50 ms bin)
+The Arduino was controlled via Matlab; the main intention behind these timing tests was to check if the added lag caused by the USB communication would differ for different boards. In addition, I tried to get a better estimate, how long this lag is, and how consistent.
+
+## Matlab Arduoni TTL series generater
 
 https://www.mathworks.com/matlabcentral/fileexchange/47522-matlab-support-package-for-arduino-hardware
 
@@ -27,7 +28,7 @@ end
 
 a = arduino;
 
-chanstr = ['D', num2str(chan)];
+chanstr = sprintf('D%d', chan);
     
 while(~KbCheck)
     % On phase
@@ -41,3 +42,29 @@ end
 
 clear a;
 ```
+
+
+
+
+
+
+
+
+## tested boards
+
+
+* [**Arduino Uno**](https://store.arduino.cc/usa/arduino-uno-rev3)
+![](https://store-cdn.arduino.cc/usa/catalog/product/cache/1/image/1000x750/f8876a31b63532bbba4e781c30024a0a/a/0/a000066_iso_3_1.jpg)
+* [**Arduino Due**](https://store.arduino.cc/usa/arduino-due)
+![](https://store-cdn.arduino.cc/usa/catalog/product/cache/1/image/1000x750/f8876a31b63532bbba4e781c30024a0a/A/0/A000062_iso_2.jpg)
+* [**Sunfounder Mega**](https://www.sunfounder.com/mega-2560-compatible-with-arduino.html)
+Correctly recognized by Matlab as Arduino Mega board.
+![](https://www.sunfounder.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/_/1_2_6.jpg)
+* [**STEMtera**](https://stemtera.com/)
+Recognized by Matlab as Arduino Uno and works as expected.
+![](https://cdn.sparkfun.com//assets/parts/1/1/9/4/6/10483-02.jpg)
+* [**Arduino 101**](https://store.arduino.cc/usa/arduino-101)
+Matlab soes not recognize the Arduino 101 board and hence it was not possible to test the TTL timings for this board.
+![](https://store-cdn.arduino.cc/usa/catalog/product/cache/1/image/1000x750/f8876a31b63532bbba4e781c30024a0a/A/B/ABX00005_iso_2.jpg)
+
+
