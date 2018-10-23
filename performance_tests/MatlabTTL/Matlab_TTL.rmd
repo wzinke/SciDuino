@@ -15,25 +15,131 @@ knitr::opts_knit$set(root.dir = getwd())
   
 Load all packages required for the analysis. If these packages are not available, install them on the fly with a `install.packages(<packagesname>)` call.
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
-Pckglst = c("ezknitr", "ggplot2", "plyr", "rstudioapi")
+```{r, message=FALSE, warning=FALSE}
+Pckglst = c("ezknitr", "ggplot2", "plyr")
 for(cPckg in Pckglst){
-if(!require(cPckg , character.only=TRUE)){
-install.packages(cPckg)
-library(cPckg , character.only = TRUE)
-}
+    if(!require(cPckg , character.only=TRUE)){
+        install.packages(cPckg)
+        library(cPckg , character.only = TRUE)
+    }
 }
 ```
 
-
 # get data
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
 
-flnm = 'data/sunfounder_mega/SeriesA/F0001CH1.CSV'
+## helper functions
 
-dt = read.csv(flnm, header=FALSE, colClasses=c("NULL", "NULL", "NULL", NA, NA))
+```{r, message=FALSE, warning=FALSE}
+# read tektronix file
+ReadTektronix = function(flnm=NA){
+    dt = read.csv(flnm, header=FALSE, colClasses=c("NULL", "NULL", "NULL", NA, NA))
+    
+    tvec = as.numeric(dt$V4) * 1000
+    vvec = as.numeric(dt$V5)
+    
+    na_pos = vvec < -8
+    bvec = as.numeric(vvec > mean(vvec[!na_pos]))
+    bvec[na_pos] = NA
+    
+    dvec = c(0, diff(bvec))
+    
+    pos = which(dvec != 0)
+    
+    On  = c()
+    Off = c()
+    
+    for(p in 1:(length(pos)-1)){
+        if(!any(is.na(dvec[pos[p]:pos[p+1]-1]))){
+            itv = tvec[pos[p+1]-1] - tvec[pos[p]]
+            if(dvec[pos[p]] ==  1){ On  = c(On,  itv)  }
+            if(dvec[pos[p]] == -1){ Off = c(Off, itv)  }
+        }
+    }
+    return(list(On=On, Off=Off))
+}
+    
+# combine all files
+ReadAllFiles = function(fllst=NA, BoardLbl=NA){
+    
+    for(i in 1:length(fllst)){
+        tmpTTL = ReadTektronix(fllst[i])
+        
+        if(i==1){ TTL = tmpTTL }
+        if(i!=1){ TTL = Map(c, TTL, tmpTTL) }
+    }
+    
+    ITV   = c(TTL$On, TTL$Off)
+    State = c(rep('ON', length(TTL$On)), rep('OFF', length(TTL$Off)))
+    Board = rep(BoardLbl, length(State))             
+
+    return(data.frame(Board, State, ITV))
+}
+```
+
+```{r, message=FALSE, warning=FALSE}
+
+flset = 0:11
+
+# Arduino Uno
+fllst = sprintf('data/repeated_50on_50off/Arduino_uno/ALL%.4d/F%.4dCH1.CSV',
+                flset, flset)
+uno_df = ReadAllFiles(fllst, BoardLbl='Uno')
+
+# Arduino Uno
+fllst = sprintf('data/repeated_50on_50off/Arduino_due/ALL%.4d/F%.4dCH1.CSV',
+                flset, flset)
+due_df = ReadAllFiles(fllst, BoardLbl='Due')
+
+# Sunfounder Mega
+fllst = sprintf('data/repeated_50on_50off/Sunfounder_mega/ALL%.4d/F%.4dCH1.CSV',
+                flset, flset)
+mega_df = ReadAllFiles(fllst, BoardLbl='Mega')
+
+# STEMtera
+fllst = sprintf('data/repeated_50on_50off/STEMtera/ALL%.4d/F%.4dCH1.CSV',
+                flset, flset)
+STEM_df = ReadAllFiles(fllst, BoardLbl='STEMtera')
+
+All_dt = rbind(uno_df, due_df)
+All_dt = rbind(All_dt, mega_df)
+All_dt = rbind(All_dt, STEM_df)
+
+All_dt$ITV_diff = All_dt$ITV - 50
+
+ON_dt  = droplevels(subset(All_dt, All_dt$State == 'ON'))
+OFF_dt = droplevels(subset(All_dt, All_dt$State == 'OFF'))
+```
 
 
+## High state time difference
+```{r, message=FALSE, warning=FALSE}
+mu <- ddply(ON_dt, "Board", summarise, grp.mean=mean(ITV_diff, na.rm=TRUE))
 
+ggplot(ON_dt, aes(x=ITV_diff, color=Board, fill=Board))                              +
+    theme_minimal() + ggtitle('TTL High') + ylab('density') + xlab('Lag [ms]')       +
+    theme(plot.title=element_text(hjust=0.5)) + theme(panel.border=element_blank())  +
+    geom_histogram(aes(y=..density..), alpha=0.1, position="identity", binwidth=0.5) +
+    scale_x_continuous(limits=c(10, 40), expand=c(0, 0.01))                          +
+    geom_density(aes(x=ITV_diff, fill=Board), alpha=0.1)                             +
+    geom_vline(data=mu, aes(xintercept=grp.mean, color=Board), linetype="dashed")    +
+    theme(legend.justification=c(1, 0), legend.position=c(1, 0.5))
+
+print(mu)
+```
+
+## Low state time difference
+```{r, message=FALSE, warning=FALSE}
+mu <- ddply(OFF_dt, "Board", summarise, grp.mean=mean(ITV_diff, na.rm=TRUE))
+
+ggplot(OFF_dt, aes(x=ITV_diff, color=Board, fill=Board))                             +
+    theme_minimal() + ggtitle('TTL Low') + ylab('density') + xlab('Lag [ms]')        +
+    theme(plot.title=element_text(hjust=0.5)) + theme(panel.border=element_blank())  +
+    geom_histogram(aes(y=..density..), alpha=0.1, position="identity", binwidth=0.5) +
+    scale_x_continuous(limits=c(10, 40), expand=c(0, 0.01))                          +
+    geom_density(aes(x=ITV_diff, fill=Board), alpha=0.1)                             +
+    geom_vline(data=mu, aes(xintercept=grp.mean, color=Board), linetype="dashed")    +
+    theme(legend.justification=c(1, 0), legend.position=c(1, 0.5))
+
+print(mu)
 ```
