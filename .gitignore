@@ -8,3 +8,4 @@
 *.mex*
 
 octave-workspace
+.Rhistory
