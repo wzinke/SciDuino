@@ -16,14 +16,13 @@ knitr::opts_knit$set(root.dir = getwd())
 Load all packages required for the analysis. If these packages are not available, install them on the fly with a `install.packages(<packagesname>)` call.
 
 ```{r, message=FALSE, warning=FALSE}
-Pckglst = c("ezknitr", "ggplot2", "plyr", "knitr", "kableExtra", "lemon")
+Pckglst = c("ezknitr", "ggplot2", "plyr", "knitr", "kableExtra")
 for(cPckg in Pckglst){
     if(!require(cPckg , character.only=TRUE, warn.conflicts=F, quietly=T)){
         install.packages(cPckg)
         library(cPckg , character.only=TRUE, warn.conflicts=F, quietly=T)
     }
 }
-knit_print.data.frame <- lemon_print
 ```
 
 # get data
@@ -126,22 +125,22 @@ OFF_dt = droplevels(subset(All_dt, All_dt$State == 'OFF'))
 mu <- ddply(ON_dt, "Board", summarise, grp.min=min(ITV_diff, na.rm=TRUE),
                                        grp.P25=quantile(ITV_diff, probs=0.25, na.rm=TRUE),
                                        grp.median=median(ITV_diff, na.rm=TRUE),
-                                       grp.mean=mean(ITV_diff, na.rm=TRUE),
+                                       grp.mean=mean(ITV_diff,     na.rm=TRUE),
                                        grp.P75=quantile(ITV_diff, probs=0.75, na.rm=TRUE),
-                                       grp.max=max(ITV_diff, na.rm=TRUE),
-                                       grp.sd=sd(ITV_diff, na.rm=TRUE),
-                                       grp.iqr=IQR(ITV_diff, na.rm=TRUE)
-            )
+                                       grp.max=max(ITV_diff,       na.rm=TRUE),
+                                       grp.sd=sd(ITV_diff,         na.rm=TRUE),
+                                       grp.iqr=IQR(ITV_diff,       na.rm=TRUE))
+
 ggplot(ON_dt, aes(x=ITV_diff, color=Board, fill=Board))                              +
     theme_minimal() + ggtitle('TTL High') + ylab('density') + xlab('Lag [ms]')       +
     theme(plot.title=element_text(hjust=0.5)) + theme(panel.border=element_blank())  +
-    geom_histogram(aes(y=..density..), alpha=0.1, position="identity", binwidth=0.5) +
-    scale_x_continuous(limits=c(10, 40), expand=c(0, 0.01))                          +
+    scale_x_continuous(limits=c(10, 35), expand=c(0, 0.01))                          +
     geom_density(aes(x=ITV_diff, fill=Board), alpha=0.1)                             +
     geom_vline(data=mu, aes(xintercept=grp.median, color=Board), linetype="dashed")  +
     theme(legend.justification=c(1, 0), legend.position=c(1, 0.5))
 
-
+    #geom_histogram(aes(y=..density..), alpha=0.1, position="identity", binwidth=0.5) +
+      
 kable(mu, digits=2)  %>%
   kable_styling(latex_options = c("striped", "hover"), full_width=F)
 
@@ -154,22 +153,22 @@ ggsave('TTL_variability.png', width=8, height=6)
 mu <- ddply(OFF_dt, "Board", summarise, grp.min=min(ITV_diff, na.rm=TRUE),
                                         grp.P25=quantile(ITV_diff, probs=0.25, na.rm=TRUE),
                                         grp.median=median(ITV_diff, na.rm=TRUE),
-                                        grp.mean=mean(ITV_diff, na.rm=TRUE),
+                                        grp.mean=mean(ITV_diff,     na.rm=TRUE),
                                         grp.P75=quantile(ITV_diff, probs=0.75, na.rm=TRUE),
-                                        grp.max=max(ITV_diff, na.rm=TRUE),
-                                        grp.sd=sd(ITV_diff, na.rm=TRUE),
-                                        grp.iqr=IQR(ITV_diff, na.rm=TRUE)
-            )
+                                        grp.max=max(ITV_diff,       na.rm=TRUE),
+                                        grp.sd=sd(ITV_diff,         na.rm=TRUE),
+                                        grp.iqr=IQR(ITV_diff,       na.rm=TRUE))
 
 ggplot(OFF_dt, aes(x=ITV_diff, color=Board, fill=Board))                             +
     theme_minimal() + ggtitle('TTL Low') + ylab('density') + xlab('Lag [ms]')        +
     theme(plot.title=element_text(hjust=0.5)) + theme(panel.border=element_blank())  +
-    geom_histogram(aes(y=..density..), alpha=0.1, position="identity", binwidth=0.5) +
-    scale_x_continuous(limits=c(10, 40), expand=c(0, 0.01))                          +
+    scale_x_continuous(limits=c(10, 35), expand=c(0, 0.01))                          +
     geom_density(aes(x=ITV_diff, fill=Board), alpha=0.1)                             +
     geom_vline(data=mu, aes(xintercept=grp.median, color=Board), linetype="dashed")  +
     theme(legend.justification=c(1, 0), legend.position=c(1, 0.5))
 
+    # geom_histogram(aes(y=..density..), alpha=0.1, position="identity", binwidth=0.5) +
+      
 kable(mu, digits=2)  %>%
   kable_styling(latex_options = c("striped", "hover"), full_width=F)
 ```

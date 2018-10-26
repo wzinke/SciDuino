@@ -47,7 +47,9 @@ clear a;
 ## tested boards
 
 * [**Arduino Uno**](https://store.arduino.cc/usa/arduino-uno-rev3)
+
 * [**Arduino Due**](https://store.arduino.cc/usa/arduino-due)
+
 * [**Sunfounder Mega**](https://www.sunfounder.com/mega-2560-compatible-with-arduino.html)
 
 Correctly recognized by Matlab as Arduino Mega board.
@@ -59,17 +61,20 @@ Recognized by Matlab as Arduino Uno and works as expected.
 * [**Arduino 101**](https://store.arduino.cc/usa/arduino-101)
 
 Matlab does not recognize the Arduino 101 board and hence it was not possible to test the TTL timings for this board.
-[**Keyestudio Leonardo**](http://www.keyestudio.com/ks0248.html)
+
+* [**Keyestudio Leonardo**](http://www.keyestudio.com/ks0248.html)
 
 Correctly recognized by Matlab.
 
-[**Keyestudio CH340 chip Nano 3.0**](http://www.keyestudio.com/ks0173.html)
+* [**Keyestudio CH340 chip Nano 3.0**](http://www.keyestudio.com/ks0173.html)
 
 Matlab did not recognize this board and therefore it was not tested.
 
 
-[**Teensy 3.6**](https://www.pjrc.com/store/teensy36.html)
+* [**Teensy 3.6**](https://www.pjrc.com/store/teensy36.html)
+
 Matlab did not recognize this board and therefore it was not tested.
+
 
 ## Summary
 
