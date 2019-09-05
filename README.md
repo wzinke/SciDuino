@@ -14,7 +14,7 @@ Tests, code, and experience to use Arduino based devices in science projects.
 
 * [**Sunfounder Mega**](https://www.sunfounder.com/mega-2560-compatible-with-arduino.html)
 
-![](https://www.sunfounder.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/_/1_2_6.jpg)
+![](https://i.stack.imgur.com/ZsfiF.png)
 
 * [**STEMtera**](https://stemtera.com/)
 
