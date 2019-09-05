@@ -24,16 +24,23 @@ Tests, code, and experience to use Arduino based devices in science projects.
 
 ![](https://store-cdn.arduino.cc/usa/catalog/product/cache/1/image/1000x750/f8876a31b63532bbba4e781c30024a0a/A/B/ABX00005_iso_2.jpg)
 
-* [**Keyestudio Leonardo**](http://www.keyestudio.com/ks0248.html)
+* [**Keyestudio Leonardo**](https://wiki.keyestudio.com/Ks0248_keyestudio_Leonardo_R3_Development_Board)
 
-![](http://www.keyestudio.com/media/catalog/product/cache/1/image/1000x/9df78eab33525d08d6e5fb8d27136e95/k/s/ks0248_1_.jpg)
+![](https://wiki.keyestudio.com/images/b/b8/KS0248.jpg)
 
-* [**Keyestudio CH340 chip Nano 3.0**](http://www.keyestudio.com/ks0173.html)
+* [**Keyestudio CH340 chip Nano 3.0**](https://wiki.keyestudio.com/Ks0173_keyestudio_Nano_ch340)
 
-![](http://www.keyestudio.com/media/catalog/product/cache/1/image/1000x/9df78eab33525d08d6e5fb8d27136e95/k/s/ks0173_3__1.jpg)
+![](https://wiki.keyestudio.com/images/1/1e/%E5%9B%BE%E7%89%871-_ks0173.png)
+
+
+Not an Arduino:
 
 * [**Teensy 3.6**](https://www.pjrc.com/store/teensy36.html)
 
 ![](https://cdn.sparkfun.com//assets/parts/1/1/8/9/7/14057-01.jpg)
 
+
+* [**Azure Sphere MT3620**](http://cloudconnectkits.org/product/azure-sphere-starter-kit)
+
+![](http://cloudconnectkits.org/sites/default/files/TNN25382.jpg)
 
