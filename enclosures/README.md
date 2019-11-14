@@ -22,7 +22,7 @@ Not an actual enclosure, but a neat way to connect the arduino board to a rigid 
 * [KKSB-Cases](https://www.kksb-cases.com/kksb-arduino-metal-project-case.html)
 This cases look nice and fancy, but they do not really offer much to interface sturdy and robust connections. All you can doo is run loose wires through the slit.
 
-![KKSB-Cases](https://www.kksb-cases.com/uploads/1/0/1/8/101880880/arduino-case-including-orig_orig.jpg  "KKSB-Cases")
+![KKSB-Cases](https://cdn.shopify.com/s/files/1/0248/6557/0909/products/Arduino_mega_928x480.jpg?v=1568479405  "KKSB-Cases")
 
 * [Modulbox](http://www.hitaltech.com/content/din-rail-plastic-enclosure-embedded-box-modulbox-arduino-mega)
 
